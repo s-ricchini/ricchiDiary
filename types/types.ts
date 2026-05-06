@@ -11,6 +11,7 @@ export interface Diary {
   id:             string;
   title:          string;
   category_name:  string | null;
+  isFav: boolean
   category_color: hex | null;
   created_at:     string;
 }

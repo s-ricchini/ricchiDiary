@@ -9,6 +9,7 @@ CREATE TABLE diaries (
     id BINARY(16) PRIMARY KEY default (UUID_TO_BIN(UUID())),
     title varchar(255) NOT NULL,
     category BINARY(16),
+    isFav BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     CONSTRAINT fk_category

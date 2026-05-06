@@ -5,7 +5,7 @@
 
 import { NewDiary,FormState } from "@/types/types"
 import { revalidatePath } from "next/cache"
-import { createDiary } from "@/queries/diaries"
+import { createDiary,toggleFav } from "@/queries/diaries"
 
 
 
@@ -26,4 +26,17 @@ export async function createNewDiary(prevState:FormState, data: FormData) {
         return {error:"Error at creating the diary "}
     }
 
+}
+
+export async function toggleFavAction(id: string, newState: boolean) {
+    try {
+        await toggleFav(id,newState)
+        revalidatePath("/dashboard")
+        return {success:true}
+
+    } catch (e) {
+        console.error(e)
+        return {success: false,error:"Error toggling fav"}
+        
+    }
 }

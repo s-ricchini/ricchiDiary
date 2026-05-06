@@ -1,5 +1,5 @@
 import { getCategories } from "@/queries/categories";
-import Link from "next/link";
+import SidebarItem from "./SidebarItem";
 
 
 export default async function CategoriasSideBar() {
@@ -13,10 +13,3 @@ export default async function CategoriasSideBar() {
 
 }
 
-function SidebarItem({nombre,id} : {nombre : string, id : string}){
-    return(
-        <Link className="block" href={`/dashboard/category/${id}`}>{nombre}</Link>
-
-    )
-
-}

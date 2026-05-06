@@ -28,18 +28,19 @@ function NewCategoryForm(){
     
     return(
 
-        <form action={action} className="bg-white border border-gray-300 rounded p-4 text-lg flex">
-            <input type="text" name="name"></input>
-            <input type="hidden" name="color" value={color}/>
+        <form action={action} className="bg-white border border-gray-300 rounded p-4 text-lg flex flex-col gap-4">
+            <div className="flex">
+                <input type="text" name="name"  placeholder="New cateogry name"required></input>
+                <input type="hidden" name="color" value={color}/>
 
-            <button type="button" onClick={() => {setActiveColorPicker(prev => !prev)}}>
-                <span>Choose Color</span>
-                {activeColorPicker ? <ChevronDownIcon className="w-6 h-6 text-gray-400"></ChevronDownIcon> : <ChevronUpIcon className="w-6 h-6 text-gray-400"></ChevronUpIcon>}
-            </button>
-            
+                <button type="button" className="flex items-center align-middle" onClick={() => {setActiveColorPicker(prev => !prev)}}>
+                    <span>Choose Color</span>
+                    {activeColorPicker ? <ChevronDownIcon className="w-6 h-6 text-gray-400"></ChevronDownIcon> : <ChevronUpIcon className="w-6 h-6 text-gray-400"></ChevronUpIcon>}
+                </button>
+                <input className="bg-gray-900 text-white p-3 text-lg" type="submit" value={"Create"} disabled={isPending}></input>
+            </div>
             {activeColorPicker && <HexColorPicker color={color} onChange={setColor}></HexColorPicker>}
 
-            <input type="submit" value={"Create"} disabled={isPending}></input>
         </form>
 
     )

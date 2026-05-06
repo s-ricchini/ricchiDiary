@@ -1,16 +1,19 @@
 import Diaries from "@/components/Diaries";
-import NewCatWidget from "@/components/NewCatWidget";
+import FormsWrapper from "@/components/FormsWrapper";
 
 
-export default function Page(){
+
+export default async function Page(){
+    
+
     return(
         <div className="flex">
-            <div className="px-5">
+            <div className="px-5 flex-1" >
                 <p className="text-3xl">Home</p> 
                 <Diaries></Diaries>
             </div>
             <div>
-                <NewCatWidget></NewCatWidget>
+                <FormsWrapper></FormsWrapper>
             </div>
 
         </div>

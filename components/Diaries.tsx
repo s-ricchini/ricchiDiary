@@ -1,7 +1,7 @@
 import { getDiaries,getDiariesByCategory } from "@/queries/diaries"
 import DiaryCard from "./DiaryCard"
 
-export default async function Diaries( {categoryId = ''} : {categoryId?:string} ){
+export default async function Diaries( {categoryId = ''} : {categoryId?:string}){
     
     let diaries = []
     

@@ -3,12 +3,12 @@ import NewCategoryForm from "./newCategoryForm"
 
 import { getCategories } from "@/queries/categories"
 
-async function NewCatWidget(){
+async function FormsWrapper(){
     //hago un fetch para las categorias
     const cats = await getCategories()
 
     return(
-        <div>
+        <div className="w-full">
             <h1>HOLA</h1>
             <NewDiaryForm categories={cats}></NewDiaryForm>
             <NewCategoryForm></NewCategoryForm>
@@ -19,4 +19,4 @@ async function NewCatWidget(){
 
 }
 
-export default NewCatWidget
+export default FormsWrapper

@@ -1,4 +1,4 @@
-type hex = `#${string}`
+export type hex = `#${string}`
 
 export interface Category {
   id:         string;
@@ -15,6 +15,11 @@ export interface Diary {
   created_at:     string;
 }
 
+export interface NewDiary{
+  title:string
+  category_id: string | null
+}
+
 export interface Entry {
   id:         string
   parent_id:  string
@@ -23,3 +28,10 @@ export interface Entry {
   created_at: Date
   updated_at: Date
 }
+
+export type NewEntry = Pick<Entry, 'parent_id'|"title"|"content">
+
+export type FormState =
+  | { success: true }
+  | { error: string }
+  | null

@@ -1,6 +1,6 @@
-import { Category } from "@/types/types";
+import { Category,hex } from "@/types/types";
 import pool from "@/db/connection";
-import { RowDataPacket } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export async function getCategories() : Promise<Category[]> {
     try {        
@@ -23,5 +23,20 @@ export async function searchCategoryById(id:string){
         console.error(error)
         return null
     }    
+
+}
+
+export async function newCategory(name:string,color:hex) {
+    try {
+        const [result] = await pool.query<ResultSetHeader>("INSERT INTO categories (name,color) VALUES (?,?)",[name,color])
+        
+        if(result.affectedRows !== 1) {
+            throw new Error("Error creando categoria")           
+        }
+
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
 
 }

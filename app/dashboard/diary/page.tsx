@@ -1,4 +1,5 @@
 import EntriesList from "@/components/EntriesList"
+import NewEntryForm from "@/components/NewEntryForm"
 interface Props {
     searchParams: Promise<{id?:string, name?:string, category?:string, color?:string}>
 }
@@ -15,6 +16,8 @@ export default async function Page({searchParams} : Props) {
                 <p>{category ? category : ""}</p>
                 <p>{color ? color : ""}</p>
             </div>
+
+            <NewEntryForm parentId={id!}></NewEntryForm>
             <EntriesList id={id!}></EntriesList>
         </div>
     )

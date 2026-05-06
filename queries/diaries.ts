@@ -1,6 +1,6 @@
 import pool from "@/db/connection";
-import { Diary } from "@/types/types";
-import { RowDataPacket } from "mysql2";
+import { Diary, NewDiary } from "@/types/types";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 
 export async function getDiaries(): Promise<Diary[]> {
@@ -40,5 +40,20 @@ export async function getDiariesByCategory(categoryId:string): Promise<Diary[]> 
     } catch (error) {
         console.error(error)
         return []
+    }
+}
+
+export async function createDiary(newDiary:NewDiary) {
+    
+    try {
+        const [result] = await pool.query<ResultSetHeader>("INSERT INTO diaries (title,category) VALUES (?,UUID_TO_BIN(?))",[newDiary.title,newDiary.category_id]) 
+
+        if(result.affectedRows !== 1){
+            throw new Error("Can't create the diary")
+        } 
+
+    } catch (error) {
+        console.error(error)
+        throw error
     }
 }

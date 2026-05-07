@@ -1,10 +1,22 @@
 import { getDiaries,getDiariesByCategory } from "@/queries/diaries"
 import DiaryCard from "./DiaryCard"
+import { getUserId } from "@/utils/userId"
+import { redirect } from "next/navigation"
 
-export default async function Diaries( {userId,categoryId = ''} : {userId: string,categoryId?:string}){
+
+export default async function Diaries( {categoryId = ''} : {categoryId?:string}){
+
     
     let diaries = []
-    
+    let userId = ''
+
+    try {
+        userId = await getUserId()
+    } catch (e) {
+        redirect('/login')
+    }
+
+
     if(categoryId !== ''){
         diaries = await getDiariesByCategory(userId,categoryId)
     } else{

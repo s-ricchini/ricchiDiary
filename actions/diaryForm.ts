@@ -6,6 +6,8 @@
 import { NewDiary,FormState } from "@/types/types"
 import { revalidatePath } from "next/cache"
 import { createDiary,toggleFav } from "@/queries/diaries"
+import { getUserId } from "@/utils/userId"
+import { redirect } from "next/navigation"
 
 
 
@@ -17,12 +19,17 @@ export async function createNewDiary(prevState:FormState, data: FormData) {
 
     const newDiary:NewDiary = {title,category_id}
     try {
-
-        await createDiary(newDiary)
+        const userId = await getUserId()
+        await createDiary(userId,newDiary)
         revalidatePath('/dashboard/')
         return {success:true}    
     } catch (error) {
         console.error(error)
+        
+        if (error instanceof Error && error.message === 'Unauthorized') {
+            redirect('/login')
+        }
+        
         return {error:"Error at creating the diary "}
     }
 
@@ -30,13 +37,16 @@ export async function createNewDiary(prevState:FormState, data: FormData) {
 
 export async function toggleFavAction(id: string, newState: boolean) {
     try {
-        await toggleFav(id,newState)
+        const userId = await getUserId()
+        await toggleFav(userId,id,newState)
         revalidatePath("/dashboard")
         return {success:true}
 
     } catch (e) {
         console.error(e)
+        if (e instanceof Error && e.message === 'Unauthorized') {
+            redirect('/login')
+        }
         return {success: false,error:"Error toggling fav"}
-        
     }
 }

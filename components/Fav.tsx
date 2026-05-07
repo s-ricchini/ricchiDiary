@@ -4,10 +4,11 @@ import { StarIcon as StarOutline } from "@heroicons/react/24/outline"
 import { StarIcon as StarSolid } from "@heroicons/react/16/solid"
 import { useState } from "react"
 import { toast } from "sonner"
-
 import { toggleFavAction } from "@/actions/diaryForm"
 
 export default function FavButton({ id,initialState }: { id:string ,initialState: boolean }) {
+    
+    
     const [isFav, setIsFav] = useState(initialState)
 
     async function handleSwitch(){

@@ -6,6 +6,10 @@ import { createEntry,deleteEntry } from "@/queries/entries"
 import { NewEntry } from "@/types/types"
 import { revalidatePath } from "next/cache"
 
+import { getUserId } from "@/utils/userId"
+import { redirect } from "next/navigation"
+
+
 type FormState =
   | { success: true }
   | { error: string }
@@ -19,11 +23,15 @@ export async function createNewEntry(prevState:FormState, data: FormData) {
     
     const newEntry: NewEntry = {parent_id,title,content}
     try {
-        await createEntry(newEntry)
+        const userId = await getUserId()
+        await createEntry(userId,newEntry)
         revalidatePath('/dashboard/diary')
         return {success:true}    
     } catch (error) {
         console.error(error)
+        if (error instanceof Error && error.message === 'Unauthorized') {
+            redirect('/login')
+        }
         return {error:"Error al crear la nueva entry"}
     }
 
@@ -31,11 +39,16 @@ export async function createNewEntry(prevState:FormState, data: FormData) {
 
 export async function deleteEntryAction(id:string) {
     try {
-        await deleteEntry(id)
+        const userId = await getUserId()
+        await deleteEntry(userId,id)
         revalidatePath('/dashboard/diary')
 
     } catch (error) {
         console.error(error)
+        
+        if (error instanceof Error && error.message === 'Unauthorized') {
+            redirect('/login')
+        }
     }
 
 }

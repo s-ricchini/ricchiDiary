@@ -1,14 +1,14 @@
 import { getDiaries,getDiariesByCategory } from "@/queries/diaries"
 import DiaryCard from "./DiaryCard"
 
-export default async function Diaries( {categoryId = ''} : {categoryId?:string}){
+export default async function Diaries( {userId,categoryId = ''} : {userId: string,categoryId?:string}){
     
     let diaries = []
     
     if(categoryId !== ''){
-        diaries = await getDiariesByCategory(categoryId)
+        diaries = await getDiariesByCategory(userId,categoryId)
     } else{
-        diaries = await getDiaries()
+        diaries = await getDiaries(userId)
     }
 
     return(

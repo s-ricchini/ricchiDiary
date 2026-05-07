@@ -1,10 +1,22 @@
 import EntriesList from "@/components/EntriesList"
 import NewEntryForm from "@/components/NewEntryForm"
+import { auth } from "@/utils/auth"
+import { redirect } from "next/navigation"
+import { headers } from "next/headers"
+
 interface Props {
     searchParams: Promise<{id?:string, name?:string, category?:string, color?:string}>
 }
 
 export default async function Page({searchParams} : Props) {
+
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if(!session){
+        redirect('/login')
+    }
 
     const {id,name,category,color} = await searchParams
     console.log(name)

@@ -3,6 +3,8 @@
 import { FormState,hex } from "@/types/types"
 import { newCategory } from "@/queries/categories"
 import { revalidatePath } from "next/cache"
+import { getUserId } from "@/utils/userId"
+import { redirect } from "next/navigation"
 
 export async function createNewCategory(prevState:FormState, data: FormData) {
     
@@ -12,14 +14,17 @@ export async function createNewCategory(prevState:FormState, data: FormData) {
     console.log(name)
     console.log(color)
 
-
     try {
-
-        await newCategory(name,color)
+        const userId = await getUserId()
+        await newCategory(userId,name,color)
         revalidatePath('/dashboard/')
         return {success:true}    
     } catch (error) {
+        
         console.error(error)
+        if (error instanceof Error && error.message === 'Unauthorized') {
+            redirect('/login')
+        }
         return {error:"Error at creating the category "}
     }
 

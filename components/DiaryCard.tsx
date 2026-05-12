@@ -2,7 +2,7 @@ import { Diary } from "@/types/types"
 import Link from "next/link"
 import { getContrastColor } from "@/utils/utils"
 import FavButton from "./Fav"
-
+import DeleteIcon from "./Delete"
 export default async function DiaryCard({ diary }: { diary: Diary }){
     
     let catColor = diary.category_color
@@ -34,6 +34,7 @@ export default async function DiaryCard({ diary }: { diary: Diary }){
                 <div className="flex gap-3">
                     <p style={{ backgroundColor: catColor, color:textColor}}  className="px-4 py-2 rounded">{diary.category_name ? diary.category_name : 'No category'}</p>
                     <FavButton id={diary.id} initialState={diary.isFav}></FavButton>
+                    <DeleteIcon id={diary.id} itemTodelete="diary"></DeleteIcon>
                     
                 </div>
             </div>

@@ -43,12 +43,15 @@ export async function deleteEntryAction(id:string) {
         await deleteEntry(userId,id)
         revalidatePath('/dashboard/diary')
 
+        return({success:true})
     } catch (error) {
         console.error(error)
         
         if (error instanceof Error && error.message === 'Unauthorized') {
             redirect('/login')
         }
+
+        return({success:false,error:"Error deleting the entry"})
     }
 
 }

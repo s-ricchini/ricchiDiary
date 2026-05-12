@@ -29,21 +29,21 @@ export default function SignUpPage() {
     }
 
     return (
-        <div>
-            <h1>Iniciar sesion</h1>
+        <div className="bg-white w-1/4 mx-auto mt-10 p-5 justify-center text-center rounded flex flex-col gap-3">
+            <h1 className="text-xl font-medium">Iniciar sesion</h1>
 
-            <form onSubmit={handleSubmit} className="bg-white p-5 flex flex-col">
-                <input name="email"    type="email"    placeholder="Email"     required />
-                <input name="password" type="password" placeholder="Contraseña (mín. 8 caracteres)" required />
+            <form onSubmit={handleSubmit} className="bg-white flex flex-col text-lg gap-3">
+                <input className="border border-gray-200 rounded p-2" name="email"    type="email"    placeholder="Email"     required />
+                <input className="border border-gray-200 rounded p-2" name="password" type="password" placeholder="Contraseña (mín. 8 caracteres)" required />
 
-                <button type="submit" disabled={loading}>
+                <button type="submit" className="hover:bg-blue-900 cursor-pointer p-2 rounded bg-blue-800 text-white" disabled={loading}>
                     {loading ? "Iniciando sesion " : "Login"}
                 </button>
 
                 {error && <p style={{ color: "red" }}>{error}</p>}
             </form>
 
-            <p>No tenes cuenta <Link href="/register"className="text-blue-900 underline">Registrarse</Link></p>
+            <p className="text-gray-700">No tenes cuenta? <Link href="/register"className="text-blue-900 underline">Registrarse</Link></p>
         </div>
         
     )

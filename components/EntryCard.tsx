@@ -1,6 +1,5 @@
 import { Entry, } from "@/types/types";
-import DeleteButton from "./DeleteButton";
-
+import DeleteIcon from "./Delete";
 
 export default function EntryCard({entry}: {entry: Entry }){
     return(
@@ -12,7 +11,7 @@ export default function EntryCard({entry}: {entry: Entry }){
             </div>
             
             <p>{entry.content}</p>
-            <DeleteButton id={entry.id} text="Delete"></DeleteButton>
+            <DeleteIcon id={entry.id} itemTodelete="entry"></DeleteIcon>
         </div>
         
     )

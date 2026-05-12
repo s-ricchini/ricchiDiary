@@ -21,7 +21,7 @@ function NewCategoryForm(){
             toast.success('Category created')
         }
         if(state?.error){
-            toast.error("Error creating the category")
+            toast.error(state.error)
         }
 
     },[state])

@@ -5,7 +5,7 @@
 
 import { NewDiary,FormState } from "@/types/types"
 import { revalidatePath } from "next/cache"
-import { createDiary,toggleFav } from "@/queries/diaries"
+import { createDiary,toggleFav,deleteDiary } from "@/queries/diaries"
 import { getUserId } from "@/utils/userId"
 import { redirect } from "next/navigation"
 
@@ -48,5 +48,21 @@ export async function toggleFavAction(id: string, newState: boolean) {
             redirect('/login')
         }
         return {success: false,error:"Error toggling fav"}
+    }
+}
+
+export async function deleteDiaryAction(id:string) {
+    try {
+        const userId = await getUserId()
+        await deleteDiary(userId,id)
+        revalidatePath("/dashboard")
+        return {success:true}
+
+    } catch (e) {
+        console.error(e)
+        if (e instanceof Error && e.message === 'Unauthorized') {
+            redirect('/login')
+        }
+        return {success: false,error:"Error deleting the diary"}
     }
 }

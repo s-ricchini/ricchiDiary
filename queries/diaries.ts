@@ -79,3 +79,21 @@ export async function toggleFav(userId: string, id: string, newState: boolean) {
         throw error
     }
 }
+
+export async function deleteDiary(userId:string,id:string) {
+    try {
+        const [result] = await pool.query<ResultSetHeader>(
+            "DELETE from diaries WHERE user_id = ? and id = UUID_TO_BIN(?)",[userId,id]
+        )
+
+        if (result.affectedRows !== 1){
+            throw new Error("Diary not found")
+        }
+
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+
+
+}

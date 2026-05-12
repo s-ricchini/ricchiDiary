@@ -4,7 +4,7 @@ import Link from "next/link"
 import { auth } from "@/utils/auth"
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
-
+import DeleteCategory from "@/components/DeleteCategory"
 
 export default async function Page({params}){
     const {id} =  await params
@@ -28,7 +28,11 @@ export default async function Page({params}){
 
     return(
         <div>
-            <p className="text-3xl">{category.name}</p>
+            <div>
+                <p className="text-3xl">{category.name}</p>
+                <DeleteCategory id={id}></DeleteCategory>
+            </div>
+            
             <Link href={"/dashboard"}><button>Volver al inicio</button></Link>
             <Diaries categoryId={id}></Diaries>
         </div>

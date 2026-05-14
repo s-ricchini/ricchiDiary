@@ -1,8 +1,9 @@
 import pool from "@/db/connection";
 import { Diary, NewDiary } from "@/types/types";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { off } from "process";
 
-export async function getDiaries(userId: string): Promise<Diary[]> {
+export async function getDiaries(userId: string,offset:number,limit:number): Promise<Diary[]> {
     const query = `
         SELECT 
             BIN_TO_UUID(d.id)   AS id,
@@ -14,9 +15,10 @@ export async function getDiaries(userId: string): Promise<Diary[]> {
         FROM diaries d
         LEFT JOIN categories c ON c.id = d.category
         WHERE d.user_id = ?
+        LIMIT ? OFFSET ?
     `;
     try {
-        const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, [userId])
+        const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, [userId,offset,limit])
         return rows
     } catch (error) {
         console.error(error)
@@ -24,7 +26,7 @@ export async function getDiaries(userId: string): Promise<Diary[]> {
     }
 }
 
-export async function getDiariesByCategory(userId: string, categoryId: string): Promise<Diary[]> {
+export async function getDiariesByCategory(userId: string, categoryId: string,limit:number,offset:number): Promise<Diary[]> {
     const query = `
         SELECT 
             BIN_TO_UUID(d.id)   AS id,
@@ -36,9 +38,10 @@ export async function getDiariesByCategory(userId: string, categoryId: string): 
         FROM diaries d
         LEFT JOIN categories c ON c.id = d.category
         WHERE d.user_id = ? AND d.category = UUID_TO_BIN(?)
+        LIMIT ? OFFSET ?
     `;
     try {
-        const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, [userId, categoryId])
+        const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, [userId, categoryId,limit,offset])
         return rows
     } catch (error) {
         console.error(error)
@@ -96,4 +99,24 @@ export async function deleteDiary(userId:string,id:string) {
     }
 
 
+}
+
+export async function getNumberOfDiaries(userId:string,category:string = "") {
+
+    try {
+        let query = `SELECT COUNT(*) AS total FROM diaries WHERE user_id = ?`
+        const params: string[] = [userId]
+
+        if (category !== "") {
+            query += ` AND category = UUID_TO_BIN(?)`
+            params.push(category)
+        }
+
+        const [rows] = await pool.query<(RowDataPacket & { total: number })[]>(query, params)
+        return rows[0].total
+
+    } catch (error) {
+        console.error(error)
+        return 0
+    }
 }

@@ -3,11 +3,19 @@ import FormsWrapper from "@/components/FormsWrapper";
 import { auth } from "@/utils/auth"
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
+import PageSelector from "@/components/pageSelector";
+import { url } from "inspector";
 
 
-
-export default async function Page(){
+export default async function Page({searchParams}){
     
+
+    let {page} = await searchParams
+    
+    if(!page){
+        page = "1"
+    }
+
     const session = await auth.api.getSession({
         headers: await headers()
     })
@@ -23,9 +31,9 @@ export default async function Page(){
 
         </div>
         <div className="flex flex-1 overflow-hidden">
-            <div className="px-5 flex-1 flex flex-col overflow-hidden">
-                <div className="overflow-y-auto flex-1 [&::-webkit-scrollbar]:hidden">
-                    <Diaries userId={session.user.id}/>
+            <div className="px-5 flex-1 flex flex-col ">
+                <div className=" flex-1 [&::-webkit-scrollbar]:hidden">
+                    <Diaries page={parseInt(page)} url="/dashboard?page=" />
                 </div>
             </div>
             <div>

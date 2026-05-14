@@ -6,8 +6,19 @@ import { redirect } from "next/navigation"
 import { headers } from "next/headers"
 import DeleteCategory from "@/components/DeleteCategory"
 
-export default async function Page({params}){
+
+
+export default async function Page({params,searchParams}){
     const {id} =  await params
+    let {page} = await searchParams
+    
+    if(!page){
+        page = "1"
+    }
+
+
+    const url = `/dashboard/category/${id}?page=`
+
 
     const session = await auth.api.getSession({
         headers: await headers()
@@ -34,7 +45,7 @@ export default async function Page({params}){
             </div>
             
             <Link href={"/dashboard"}><button>Volver al inicio</button></Link>
-            <Diaries categoryId={id}></Diaries>
+            <Diaries page={parseInt(page)} url={url}  categoryId={id}></Diaries>
         </div>
         
     )

@@ -28,8 +28,8 @@ export default function FavButton({ id,initialState }: { id:string ,initialState
     return (
         <button onClick={handleSwitch} className="cursor-pointer">
             {isFav 
-                ? <StarSolid className="w-6 h-6 text-yellow-400" />
-                : <StarOutline className="w-6 h-6 text-gray-400 hover:text-yellow-400" />
+                ? <StarSolid className="w-7 h-7 text-yellow-400" />
+                : <StarOutline className="w-7 h-7 text-gray-400 hover:text-yellow-400" />
             }
         </button>
     )

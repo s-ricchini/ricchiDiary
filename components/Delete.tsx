@@ -36,7 +36,7 @@ export default function DeleteIcon({ id,itemTodelete }: { id:string ,itemTodelet
     }
 
     return (
-        <TrashIcon  onClick={handleDelete} className="h-6 w-6 text-gray-500 hover:text-red-600"></TrashIcon>
+        <TrashIcon  onClick={handleDelete} className="h-6 w-6 text-gray-400 cursor-pointer hover:text-red-600"></TrashIcon>
     )
 }
 

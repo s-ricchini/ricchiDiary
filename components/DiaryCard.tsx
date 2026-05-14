@@ -27,11 +27,11 @@ export default async function DiaryCard({ diary }: { diary: Diary }){
     }
 
     return(
-            <div className="flex w-full hover:shadow justify-between items-center p-5 bg-white gap-30 border border-gray-200 rounded">
+            <div className="flex w-full hover:shadow justify-between items-center text-lg p-5 bg-white gap-30 border border-gray-200 rounded">
                 <Link href={url}>
                     <p className="text-xl">{diary.title}</p>
                 </Link>
-                <div className="flex gap-3">
+                <div className="flex gap-2 items-center">
                     <p style={{ backgroundColor: catColor, color:textColor}}  className="px-4 py-2 rounded">{diary.category_name ? diary.category_name : 'No category'}</p>
                     <FavButton id={diary.id} initialState={diary.isFav}></FavButton>
                     <DeleteIcon id={diary.id} itemTodelete="diary"></DeleteIcon>

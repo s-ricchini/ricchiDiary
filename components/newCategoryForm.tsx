@@ -23,9 +23,12 @@ function NewCategoryForm(){
         if(state?.error){
             toast.error(state.error)
         }
+        setActiveColorPicker(false)
 
     },[state])
     
+
+
     return(
 
         <div className="space-y-3">

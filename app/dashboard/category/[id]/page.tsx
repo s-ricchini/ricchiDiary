@@ -1,12 +1,9 @@
 import { searchCategoryById } from "@/queries/categories"
 import Diaries from "@/components/Diaries"
 import Link from "next/link"
-import { auth } from "@/utils/auth"
-import { redirect } from "next/navigation"
-import { headers } from "next/headers"
 import DeleteCategory from "@/components/DeleteCategory"
 
-
+import { getSessionOrRedirect } from "@/utils/userId"
 
 export default async function Page({params,searchParams}){
     const {id} =  await params
@@ -16,26 +13,14 @@ export default async function Page({params,searchParams}){
         page = "1"
     }
 
-
     const url = `/dashboard/category/${id}?page=`
+    const session = await getSessionOrRedirect()
 
-
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if(!session){
-        redirect('/login')
-    }
-
-
-    //hago un fetch a las categorias y luego uno a todos los entryes
+    //hago un fetch a las categorias y luego uno a todos los entries
     const category = await searchCategoryById(session.user.id,id)
     if(!category){
         return("Error")
     }
-
-    
 
     return(
         <div>

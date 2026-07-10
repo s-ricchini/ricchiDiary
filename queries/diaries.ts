@@ -1,52 +1,39 @@
 import pool from "@/db/connection";
 import { Diary, NewDiary } from "@/types/types";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { off } from "process";
 
-export async function getDiaries(userId: string,offset:number,limit:number): Promise<Diary[]> {
-    const query = `
-        SELECT 
-            BIN_TO_UUID(d.id)   AS id,
+
+export async function getDiaries(userId: string, categoryId: string, limit:number, offset:number) :Promise<Diary[]> {
+        let query = `
+        SELECT
+            BIN_TO_UUID(d.id) AS id,
             d.title,
             d.isFav,
-            c.name              AS category_name,
-            c.color             AS category_color,
+            c.name AS category_name,
+            c.color AS category_color,
             d.created_at
         FROM diaries d
         LEFT JOIN categories c ON c.id = d.category
         WHERE d.user_id = ?
-        LIMIT ? OFFSET ?
     `;
-    try {
-        const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, [userId,offset,limit])
-        return rows
-    } catch (error) {
-        console.error(error)
-        return []
-    }
-}
 
-export async function getDiariesByCategory(userId: string, categoryId: string,limit:number,offset:number): Promise<Diary[]> {
-    const query = `
-        SELECT 
-            BIN_TO_UUID(d.id)   AS id,
-            d.title,
-            d.isFav,
-            c.name              AS category_name,
-            c.color             AS category_color,
-            d.created_at
-        FROM diaries d
-        LEFT JOIN categories c ON c.id = d.category
-        WHERE d.user_id = ? AND d.category = UUID_TO_BIN(?)
-        LIMIT ? OFFSET ?
-    `;
-    try {
-        const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, [userId, categoryId,limit,offset])
-        return rows
-    } catch (error) {
-        console.error(error)
-        return []
-    }
+        const params: any[] = [userId];
+
+        if (categoryId) {
+            query += ` AND d.category = UUID_TO_BIN(?)`;
+            params.push(categoryId);
+        }
+
+        query += ` LIMIT ? OFFSET ?`;
+        params.push(limit, offset);
+
+        try {
+            const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, params);
+            return rows;
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
 }
 
 export async function createDiary(userId: string, newDiary: NewDiary) {

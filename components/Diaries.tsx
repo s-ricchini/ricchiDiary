@@ -1,25 +1,13 @@
-import { getDiaries,getDiariesByCategory } from "@/queries/diaries"
+import { getDiaries } from "@/queries/diaries"
 import DiaryCard from "./DiaryCard"
 import { getUserId } from "@/utils/userId"
-import { redirect } from "next/navigation"
 import { getNumberOfDiaries } from "@/queries/diaries"
 import PageSelector from "./pageSelector"
 
 export default async function Diaries( {categoryId = '',page,url} : {categoryId?:string, page:number,url:string}){
 
-    if(page){
-        console.log("PAGINA: ",page)
-    }
-
+    const userId = await getUserId()
     let diaries = []
-    let userId = ''
-    
-
-    try {
-        userId = await getUserId()
-    } catch (e) {
-        redirect('/login')
-    }
 
     const limit = 4
     //calculo el offset  si pagina = 1 offset = 0
@@ -27,13 +15,7 @@ export default async function Diaries( {categoryId = '',page,url} : {categoryId?
     const totalRecords = await getNumberOfDiaries(userId,categoryId)
     const maxPages = Math.ceil(totalRecords / limit)
 
-
-
-    if(categoryId !== ''){
-        diaries = await getDiariesByCategory(userId,categoryId,limit,offset)
-    } else{
-        diaries = await getDiaries(userId,limit,offset)
-    }
+    diaries = await getDiaries(userId,categoryId,limit,offset)
 
     return(
         <div className="flex flex-col justify-between h-full">

@@ -1,9 +1,7 @@
 import Diaries from "@/components/Diaries";
 import FormsWrapper from "@/components/FormsWrapper";
-import { auth } from "@/utils/auth"
-import { redirect } from "next/navigation"
-import { headers } from "next/headers"
 import { capitalize } from "@/utils/utils";
+import { getSessionOrRedirect } from "@/utils/userId";
 
 export default async function Page({searchParams}){
     
@@ -14,13 +12,7 @@ export default async function Page({searchParams}){
         page = "1"
     }
 
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if(!session){
-        redirect('/login')
-    }
+    const session = await getSessionOrRedirect()
 
     return (
     <div className="flex flex-col h-screen">

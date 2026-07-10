@@ -8,3 +8,7 @@ export function getContrastColor(hexColor: string): string {
   
   return luminance > 0.5 ? '#000000' : '#ffffff'
 }
+
+export function capitalize(str: string) : string {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

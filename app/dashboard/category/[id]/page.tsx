@@ -42,6 +42,7 @@ export default async function Page({params,searchParams}){
             <div>
                 <p className="text-3xl">{category.name}</p>
                 <DeleteCategory id={id}></DeleteCategory>
+                
             </div>
             
             <Link href={"/dashboard"}><button>Volver al inicio</button></Link>

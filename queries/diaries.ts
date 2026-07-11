@@ -3,8 +3,27 @@ import { Diary, NewDiary } from "@/types/types";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 
-export async function getDiaries(userId: string, categoryId: string, limit:number, offset:number) :Promise<Diary[]> {
-        let query = `
+type GetDiariesOptions = {
+    categoryId?: string;
+    search?: string;
+    onlyFavorites?: boolean;
+    sort?: "newest" | "oldest";
+    limit: number;
+    offset: number;
+};
+
+
+export async function getDiaries(userId: string,options: GetDiariesOptions): Promise<Diary[]> {
+    const {
+        categoryId,
+        search,
+        onlyFavorites,
+        sort = "newest",
+        limit,
+        offset
+    } = options;
+
+    let query = `
         SELECT
             BIN_TO_UUID(d.id) AS id,
             d.title,
@@ -17,23 +36,42 @@ export async function getDiaries(userId: string, categoryId: string, limit:numbe
         WHERE d.user_id = ?
     `;
 
-        const params: any[] = [userId];
+    const params: any[] = [userId];
 
-        if (categoryId) {
-            query += ` AND d.category = UUID_TO_BIN(?)`;
-            params.push(categoryId);
-        }
+    if (categoryId) {
+        query += ` AND d.category = UUID_TO_BIN(?)`;
+        params.push(categoryId);
+    }
 
-        query += ` LIMIT ? OFFSET ?`;
-        params.push(limit, offset);
+    if (onlyFavorites) {
+        query += ` AND d.isFav = TRUE`;
+    }
 
-        try {
-            const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, params);
-            return rows;
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
+    if (search) {
+        query += ` AND d.title LIKE ?`;
+        params.push(`%${search}%`);
+    }
+
+    query += ` ORDER BY d.created_at`;
+
+    if (sort === "oldest") {
+        query += ` ASC`;
+    } else {
+        query += ` DESC`;
+    }
+
+    query += ` LIMIT ? OFFSET ?`;
+
+    params.push(limit);
+    params.push(offset);
+
+    try {
+        const [rows] = await pool.query<(RowDataPacket & Diary)[]>(query, params);
+        return rows;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
 }
 
 export async function createDiary(userId: string, newDiary: NewDiary) {

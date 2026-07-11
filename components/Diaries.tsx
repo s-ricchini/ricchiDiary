@@ -15,7 +15,7 @@ export default async function Diaries( {categoryId = '',page,url} : {categoryId?
     const totalRecords = await getNumberOfDiaries(userId,categoryId)
     const maxPages = Math.ceil(totalRecords / limit)
 
-    diaries = await getDiaries(userId,categoryId,limit,offset)
+    diaries = await getDiaries(userId,{categoryId,limit,offset})
 
     return(
         <div className="flex flex-col justify-between h-full">

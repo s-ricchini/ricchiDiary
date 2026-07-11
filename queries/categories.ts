@@ -2,6 +2,7 @@ import { Category,hex } from "@/types/types";
 import pool from "@/db/connection";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
+
 export async function getCategories(userId:string) : Promise<Category[]> {
     try {        
         const [rows] = await pool.query<(RowDataPacket & Category)[]>("SELECT BIN_TO_UUID(id) as id, name,color,created_at from categories WHERE user_id = ?;",[userId])

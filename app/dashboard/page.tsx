@@ -2,7 +2,7 @@ import Diaries from "@/components/Diaries";
 import FormsWrapper from "@/components/FormsWrapper";
 import { capitalize } from "@/utils/utils";
 import { getSessionOrRedirect } from "@/utils/userId";
-
+import SearchBar from "@/components/SearchBar";
 export default async function Page({searchParams}){
     
 
@@ -23,10 +23,12 @@ export default async function Page({searchParams}){
         <div className="flex flex-1 overflow-hidden">
             <div className="px-5 flex-1 flex flex-col ">
                 <div className=" flex-1 [&::-webkit-scrollbar]:hidden">
+                    
                     <Diaries page={parseInt(page)} url="/dashboard?page=" />
                 </div>
             </div>
             <div>
+                <SearchBar></SearchBar>
                 <FormsWrapper userId={session.user.id} />
             </div>
         </div>
